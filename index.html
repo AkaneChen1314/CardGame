@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b22">
+  <title>蒼穹決戰：星界牌陣</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient"><i></i><i></i><i></i></div>
+  <main id="app">
+    <section id="startScreen" class="screen active home-screen">
+      <div class="home-copy">
+        <span class="eyebrow">ORIGINAL CARD BATTLE</span>
+        <h1>蒼穹決戰<br><em>星界牌陣</em></h1>
+        <p>選擇契約者、構築你的每一回合。抽牌、累積星能，在崩壞前擊破天災級異相。</p>
+        <div class="home-actions">
+          <button class="btn primary huge" id="startBtn">進入牌陣 <span>→</span></button>
+          <button class="btn ghost" id="rulesBtn">玩法說明</button>
+        </div>
+        <div class="feature-row"><span>✦ 角色牌組</span><span>✦ 回合策略</span><span>✦ 原創立繪</span><span>✦ 完全離線</span></div>
+      </div>
+      <div class="home-art">
+        <div class="moon"></div>
+        <div class="poster poster-back"><img src="assets/lunar.webp" alt="月璃"></div>
+        <div class="poster poster-front"><img src="assets/azure.webp" alt="蒼凜"><b>AZURE<br>OBSERVER</b></div>
+        <div class="floating-card">✦<small>STARFALL</small></div>
+      </div>
+    </section>
+
+    <section id="selectScreen" class="screen selection-screen">
+      <header class="topbar">
+        <div><span class="eyebrow">CONTRACT 01</span><h2>選擇你的契約者</h2><p>每名角色擁有不同牌組與被動能力。</p></div>
+        <button class="btn ghost" data-back="startScreen">返回首頁</button>
+      </header>
+      <div id="fighterGrid" class="fighter-grid"></div>
+      <div class="dock glass"><div><small>目前選擇</small><strong id="selectedFighterName">尚未選擇</strong></div><button class="btn primary" id="toSupportBtn" disabled>選擇支援者 →</button></div>
+    </section>
+
+    <section id="supportScreen" class="screen selection-screen">
+      <header class="topbar">
+        <div><span class="eyebrow">CONTRACT 02</span><h2>選擇星靈支援</h2><p>支援能力每場只能觸發一次或在特定回合生效。</p></div>
+        <button class="btn ghost" data-back="selectScreen">返回選角</button>
+      </header>
+      <div id="supportGrid" class="support-grid"></div>
+      <div class="dock glass"><div><small>支援契約</small><strong id="selectedSupportName">未選擇</strong></div><div><button class="btn ghost" id="skipSupportBtn">不使用支援</button><button class="btn primary" id="battleBtn">進入戰場 →</button></div></div>
+    </section>
+
+    <section id="battleScreen" class="screen battle-screen">
+      <div class="battle-bg"></div><div class="battle-vignette"></div>
+      <header class="battle-top glass">
+        <div><span class="eyebrow">ASTRAL RIFT</span><strong id="battleTitle">第七觀測界域</strong></div>
+        <div class="round">ROUND <b id="roundNum">1</b><small id="turnLabel">你的回合</small></div>
+        <button class="icon-btn" id="quitBtn" title="返回首頁">×</button>
+      </header>
+
+      <div class="battle-field">
+        <article class="unit player-unit">
+          <div class="unit-art"><img id="playerPortrait" alt="玩家角色"><div class="aura"></div><div class="damage-pop"></div></div>
+          <div class="unit-panel glass">
+            <div class="unit-name"><div><small id="playerTitle"></small><h3 id="playerName"></h3></div><span id="playerStatus" class="status">正常</span></div>
+            <div class="meter-label"><span>生命</span><b id="playerHpText"></b></div><div class="meter hp"><i id="playerHpBar"></i></div>
+            <div class="meter-label"><span>星能</span><b id="playerEnergyText"></b></div><div class="meter energy"><i id="playerEnergyBar"></i></div>
+            <div class="buff-row" id="playerBuffs"></div>
+          </div>
+        </article>
+
+        <div class="center-info">
+          <div class="enemy-intent glass"><small>敵方意圖</small><strong id="intentName">蓄勢</strong><span id="intentValue">？</span></div>
+          <div class="versus">V<span>S</span></div>
+          <div class="deck-count"><span>牌庫 <b id="deckCount">0</b></span><span>棄牌 <b id="discardCount">0</b></span></div>
+        </div>
+
+        <article class="unit enemy-unit">
+          <div class="unit-art"><img id="enemyPortrait" src="assets/enemy.webp" alt="獄骸"><div class="aura"></div><div class="damage-pop"></div></div>
+          <div class="unit-panel glass">
+            <div class="unit-name"><div><small>天災級異相</small><h3 id="enemyName">獄骸</h3></div><span id="enemyStatus" class="status danger">侵蝕</span></div>
+            <div class="meter-label"><span>生命</span><b id="enemyHpText"></b></div><div class="meter hp enemy-hp"><i id="enemyHpBar"></i></div>
+            <div class="buff-row" id="enemyBuffs"></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="card-console">
+        <div class="turn-tools glass">
+          <div class="ap-orb"><b id="apValue">3</b><span>行動點</span></div>
+          <div id="supportMini" class="support-mini"></div>
+          <button class="btn end-turn" id="endTurnBtn">結束回合</button>
+        </div>
+        <div id="hand" class="hand"></div>
+      </div>
+      <button class="log-toggle" id="logToggle">戰鬥紀錄</button>
+      <aside class="battle-log glass" id="logPanel"><div class="log-head"><strong>戰鬥紀錄</strong><button id="closeLog">×</button></div><div id="battleLog"></div></aside>
+    </section>
+
+    <section id="resultScreen" class="screen result-screen">
+      <div class="result-art"><img id="resultPortrait" alt="結果角色"></div>
+      <div class="result-card glass"><span class="eyebrow">BATTLE RESULT</span><div id="resultRank" class="rank">S</div><h1 id="resultTitle">界域淨化完成</h1><p id="resultText"></p><div id="resultStats" class="result-stats"></div><div class="home-actions"><button class="btn primary" id="againBtn">再次挑戰</button><button class="btn ghost" id="homeBtn">返回首頁</button></div></div>
+    </section>
+  </main>
+
+  <div class="modal" id="rulesModal" aria-hidden="true"><div class="modal-card glass"><button class="modal-x" id="closeRules">×</button><span class="eyebrow">HOW TO PLAY</span><h2>星界牌陣戰鬥規則</h2><div class="rule-grid"><div><b>01</b><h3>抽取卡牌</h3><p>每回合抽至 5 張。牌庫用盡時，棄牌堆會重新洗牌。</p></div><div><b>02</b><h3>分配行動點</h3><p>每回合有 3 點。不同卡牌會消耗 0～3 點行動點。</p></div><div><b>03</b><h3>觀察意圖</h3><p>敵人的下次行動會先公開。先防禦或全力進攻，由你決定。</p></div><div><b>04</b><h3>引爆終結技</h3><p>普通攻擊累積星能，滿足條件後打出角色專屬終結牌。</p></div></div></div></div>
+  <div class="toast" id="toast"></div>
+  <script src="game.js"></script>
+</body>
+</html>
